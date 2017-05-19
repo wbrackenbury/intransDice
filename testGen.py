@@ -13,10 +13,11 @@ def generate_pips(n, burn):
 
 	stan = list(range(1, n + 1, 1))
 	die = stan
-	a = rd.randint(1, n)
 
 	for i in range(burn):
 		
+		a = rd.randint(1, n)
+
 		x = rd.randint(0, n - 1)
 		y = rd.randint(0, n - 1)		
 

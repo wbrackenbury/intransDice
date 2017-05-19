@@ -6,75 +6,7 @@ import pickle as pl
 import numpy as np
 from PIL import Image
 import math
-
-
-#TODO: determine if this method for generating dice is truly random, or at the very least equivalent to the method Dr. Gowers suggested
-
-def generate1(n):
-
-	die = []
-
-	stan = list(range(1, n + 1, 1))
-	die = stan
-
-	for i in range(500):
-		
-		x = rd.randint(0, n - 1)
-		y = rd.randint(0, n - 1)		
-
-		if die[x] <= 1 or die[y] >= n:
-			continue
-		else:
-			die[x] -= 1
-			die[y] += 1
-
-	die.sort()
-
-	return die
-
-def generate(num, n):
-
-	dice = []
-	count = 0
-
-	while len(dice) < num:
-		
-		count += 1
-
-		die = [rd.randint(1, n) for i in range(n)]
-		if sum(die) != (n * (n + 1)) / 2:
-			continue
-		die.sort()
-		dice.append(die)
-
-	print "Count: " + str(count)
-
-	return dice
-
-
-#dom function
-
-def dom(a, b, n):
-
-	adom = 0
-	bdom = 0
-
-	for i in range(n):
-		for j in range(n):
-			
-			if a[i] > b[j]:
-				adom += 1
-			elif a[i] < b[j]:
-				bdom += 1
-			else:
-				continue
-	
-	if adom > bdom:
-		return "Beats"
-	elif adom < bdom:
-		return "Loses"
-	else:
-		return "Ties"
+from diceFuncs import *
 
 
 def initgen():
@@ -119,11 +51,64 @@ def calc_result():
 
 def test_res():
 
-	infile = open("results_s300x1000_1.p", "rb")
+	n = 100
+	x = 1000
+
+	infile = open("s100x1000.p", "rb")
 	result = pl.load(infile)
 	infile.close()
-
-	print result
+	
+	
+	#for i in range(10):
+	#	print(result[i])
+	
+	#return
+	
+	results = []
+	
+	#Create the histogram for the standard die
+	stan = {}
+	for i in range(n):
+		stan[str(i + 1)] = 1
+	
+	for i in range(x):
+		g = dict()
+		totvar = 0
+		for j in range(n):
+			item = str(result[i][j])
+			
+			if item in g:
+				g[item] += 1
+			else:
+				g[item] = 1
+	
+		for key in stan:
+			#print(g[key])
+			#print(stan[key])
+			#print()
+			#time.sleep(1)
+			
+			if key not in g:
+				ref = 0
+			else:
+				ref = g[key]
+		
+			
+			#Total Variation Distance
+			totvar += (.5 * abs(ref - stan[key]))
+		
+		
+		#print(totvar)
+		
+		
+		results.append(totvar)
+	
+	
+	show = np.array(list(results))
+	print("Mean: " + str(show.mean()))
+	print("Var: " + str(show.var()))
+	
+	#print(result)
 
 
 	return 0
@@ -176,5 +161,5 @@ def plot_result():
 #testgen()
 #initgen()
 #main()
-#test_res()
-plot_result()
+test_res()
+#plot_result()
