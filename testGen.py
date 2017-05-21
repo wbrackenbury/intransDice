@@ -1,5 +1,5 @@
 import random as rd
-import matplotlib.pyplot as mtp
+#import matplotlib.pyplot as mtp
 import pickle as pl
 import numpy as np
 from PIL import Image
@@ -169,4 +169,4 @@ def test_results2():
 	#print(results)
 	
 #main()
-test_results2()
+#test_results2()
